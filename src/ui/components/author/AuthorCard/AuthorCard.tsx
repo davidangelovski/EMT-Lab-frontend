@@ -15,8 +15,7 @@ const AuthorCard = ({ author }: AuthorCardProps) => {
                     {author.name} {author.surname}
                 </Typography>
                 <Stack direction='row' spacing={1} useFlexGap sx={{ flexWrap: 'wrap' }}>
-                    <Chip label={author.country.name} size='small' color='primary' variant='outlined' />
-                    <Chip label={author.country.continent} size='small' color='secondary' variant='outlined' />
+                    <Chip label={author.countryName} size='small' color='primary' variant='outlined' />
                 </Stack>
             </CardContent>
             <CardActions sx={{ justifyContent: 'flex-end' }}>

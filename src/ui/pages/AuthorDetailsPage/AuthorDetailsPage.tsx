@@ -45,11 +45,10 @@ const AuthorDetailsPage = () => {
                             {author.name} {author.surname}
                         </Typography>
                         <Typography variant='h5' sx={{ mb: 2 }}>
-                            {author.country.name}
+                            {author.countryName}
                         </Typography>
                         <Stack direction='row' spacing={1} useFlexGap sx={{ mb: 3, flexWrap: 'wrap' }}>
-                            <Chip label={`Country: ${author.country.name}`} color='primary' variant='outlined' />
-                            <Chip label={`Continent: ${author.country.continent}`} color='secondary' variant='outlined' />
+                            <Chip label={`Country: ${author.countryName}`} color='primary' variant='outlined' />
                         </Stack>
                         <Typography variant='body2' color='text.secondary'>
                             Author ID: {author.id}

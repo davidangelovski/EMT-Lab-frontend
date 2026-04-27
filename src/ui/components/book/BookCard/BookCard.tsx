@@ -15,13 +15,13 @@ const BookCard = ({ book }: BookCardProps) => {
                     {book.name}
                 </Typography>
                 <Typography variant='body2' color='text.secondary' sx={{ mb: 1 }}>
-                    by {book.author.name} {book.author.surname}
+                    by {book.authorName} {book.authorSurname}
                 </Typography>
                 <Stack direction='row' spacing={1} useFlexGap sx={{ mb: 2, flexWrap: 'wrap' }}>
                     <Chip label={book.category} size='small' color='primary' variant='outlined' />
                     <Chip label={book.state} size='small' color='secondary' variant='outlined' />
                 </Stack>
-                <Typography variant='body2'>Available copies: {book.available_copies}</Typography>
+                <Typography variant='body2'>Available copies: {book.availableCopies}</Typography>
             </CardContent>
             <CardActions sx={{ justifyContent: 'flex-end' }}>
                 <Button component={Link} to={`/books/${book.id}`} startIcon={<InfoIcon />}>

@@ -45,7 +45,7 @@ const BookDetailsPage = () => {
                             {book.name}
                         </Typography>
                         <Typography variant='h5' color='primary.main' sx={{ mb: 2 }}>
-                            {book.author.name} {book.author.surname}
+                            {book.authorName} {book.authorSurname}
                         </Typography>
                         <Typography variant='body1' sx={{ mb: 3 }}>
                             A book categorized as <strong>{book.category}</strong> and currently marked as <strong>{book.state}</strong>.
@@ -54,7 +54,7 @@ const BookDetailsPage = () => {
                         <Stack direction='row' spacing={1} useFlexGap sx={{ mb: 3, flexWrap: 'wrap' }}>
                             <Chip label={`Category: ${book.category}`} color='primary' variant='outlined' />
                             <Chip label={`State: ${book.state}`} color='secondary' variant='outlined' />
-                            <Chip label={`Available copies: ${book.available_copies}`} variant='outlined' />
+                            <Chip label={`Available copies: ${book.availableCopies}`} variant='outlined' />
                         </Stack>
 
                         <Typography variant='body2' color='text.secondary'>
