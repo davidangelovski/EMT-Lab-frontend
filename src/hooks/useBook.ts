@@ -29,7 +29,7 @@ const useBook = (id?: string) => {
         void fetch();
     }, [fetch]);
 
-    return { book, loading, error };
+    return { book, loading, error, fetch };
 };
 
 export default useBook;

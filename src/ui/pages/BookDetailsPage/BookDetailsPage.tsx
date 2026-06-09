@@ -2,11 +2,21 @@ import { Alert, Avatar, Box, Breadcrumbs, Button, Chip, CircularProgress, Grid, 
 import { ArrowBack } from '@mui/icons-material';
 import { Link, useNavigate, useParams } from 'react-router';
 import useBook from '../../../hooks/useBook';
+import { useState } from 'react';
+import type { Book } from '../../../api/types/book';
+import EditBookDialog from '../../components/book/EditBookDialog/EditBookDialog';
+import DeleteBookDialog from '../../components/book/DeleteBookDialog/DeleteProductDialog';
+import useBooks from '../../../hooks/useBooks';
+import { useAuth } from '../../../context/AuthContext';
 
 const BookDetailsPage = () => {
     const navigate = useNavigate();
     const { id } = useParams();
-    const { book, loading, error } = useBook(id);
+    const { book, loading, error, fetch } = useBook(id);
+    const { onEdit, onDelete } = useBooks();
+    const { isAdmin } = useAuth();
+    const [editingBook, setEditingBook] = useState<Book | null>(null);
+    const [deletingBook, setDeletingBook] = useState<Book | null>(null);
 
     if (error) {
         return <Alert severity='error'>{error.message}</Alert>;
@@ -55,11 +65,19 @@ const BookDetailsPage = () => {
                             <Chip label={`Category: ${book.category}`} color='primary' variant='outlined' />
                             <Chip label={`State: ${book.state}`} color='secondary' variant='outlined' />
                             <Chip label={`Available copies: ${book.availableCopies}`} variant='outlined' />
+                            <Chip label={`Country: ${book.country}`} variant='outlined' />
                         </Stack>
 
                         <Typography variant='body2' color='text.secondary'>
                             Book ID: {book.id}
                         </Typography>
+
+                        {isAdmin && (
+                            <Stack direction='row' spacing={1} sx={{ mt: 3, flexWrap: 'wrap' }}>
+                                <Button variant='contained' onClick={() => setEditingBook(book)}>Edit</Button>
+                                <Button variant='outlined' color='error' onClick={() => setDeletingBook(book)}>Delete</Button>
+                            </Stack>
+                        )}
                     </Grid>
 
                     <Grid size={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -69,6 +87,32 @@ const BookDetailsPage = () => {
                     </Grid>
                 </Grid>
             </Paper>
+
+            {editingBook && (
+                <EditBookDialog
+                    book={editingBook}
+                    open={true}
+                    onClose={() => setEditingBook(null)}
+                    onEdit={async (bookId, payload) => {
+                        await onEdit(bookId, payload);
+                        await fetch();
+                        setEditingBook(null);
+                    }}
+                />
+            )}
+
+            {deletingBook && (
+                <DeleteBookDialog
+                    book={deletingBook}
+                    open={true}
+                    onClose={() => setDeletingBook(null)}
+                    onDelete={async (bookId) => {
+                        await onDelete(bookId);
+                        setDeletingBook(null);
+                        navigate('/books');
+                    }}
+                />
+            )}
         </Box>
     );
 };

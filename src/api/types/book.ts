@@ -9,3 +9,10 @@ export interface Book {
     availableCopies: number;
 }
 
+export interface BookFormData {
+    name: string;
+    category: string;
+    authorId: number;
+    state: string;
+    availableCopies: number;
+}

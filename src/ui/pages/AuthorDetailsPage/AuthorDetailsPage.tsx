@@ -2,11 +2,21 @@ import { Alert, Avatar, Box, Breadcrumbs, Button, Chip, CircularProgress, Grid, 
 import { ArrowBack } from '@mui/icons-material';
 import { Link, useNavigate, useParams } from 'react-router';
 import useAuthor from '../../../hooks/useAuthor';
+import { useState } from 'react';
+import type { Author } from '../../../api/types/author';
+import { useAuth } from '../../../context/AuthContext';
+import EditAuthorDialog from '../../components/author/EditAuthorDialog/EditAuthorDialog';
+import DeleteAuthorDialog from '../../components/author/DeleteAuthorDialog/DeleteAuthorDialog';
+import useAuthors from '../../../hooks/useAuthors';
 
 const AuthorDetailsPage = () => {
     const navigate = useNavigate();
     const { id } = useParams();
-    const { author, loading, error } = useAuthor(id);
+    const { author, loading, error, fetch } = useAuthor(id);
+    const { onEdit, onDelete } = useAuthors();
+    const { isAdmin } = useAuth();
+    const [editingAuthor, setEditingAuthor] = useState<Author | null>(null);
+    const [deletingAuthor, setDeletingAuthor] = useState<Author | null>(null);
 
     if (error) {
         return <Alert severity='error'>{error.message}</Alert>;
@@ -53,6 +63,13 @@ const AuthorDetailsPage = () => {
                         <Typography variant='body2' color='text.secondary'>
                             Author ID: {author.id}
                         </Typography>
+
+                        {isAdmin && (
+                            <Stack direction='row' spacing={1} sx={{ mt: 3, flexWrap: 'wrap' }}>
+                                <Button variant='contained' onClick={() => setEditingAuthor(author)}>Edit</Button>
+                                <Button variant='outlined' color='error' onClick={() => setDeletingAuthor(author)}>Delete</Button>
+                            </Stack>
+                        )}
                     </Grid>
 
                     <Grid size={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -62,6 +79,32 @@ const AuthorDetailsPage = () => {
                     </Grid>
                 </Grid>
             </Paper>
+
+            {editingAuthor && (
+                <EditAuthorDialog
+                    author={editingAuthor}
+                    open={true}
+                    onClose={() => setEditingAuthor(null)}
+                    onEdit={async (authorId, payload) => {
+                        await onEdit(authorId, payload);
+                        await fetch();
+                        setEditingAuthor(null);
+                    }}
+                />
+            )}
+
+            {deletingAuthor && (
+                <DeleteAuthorDialog
+                    author={deletingAuthor}
+                    open={true}
+                    onClose={() => setDeletingAuthor(null)}
+                    onDelete={async (authorId) => {
+                        await onDelete(authorId);
+                        setDeletingAuthor(null);
+                        navigate('/authors');
+                    }}
+                />
+            )}
         </Box>
     );
 };

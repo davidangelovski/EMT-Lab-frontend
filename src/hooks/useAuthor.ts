@@ -26,10 +26,10 @@ const useAuthor = (id?: string) => {
     }, [id]);
 
     useEffect(() => {
-        void fetch();
+        void Promise.resolve().then(fetch);
     }, [fetch]);
 
-    return { author, loading, error };
+    return { author, loading, error, fetch };
 };
 
 export default useAuthor;

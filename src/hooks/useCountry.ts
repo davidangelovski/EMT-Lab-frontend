@@ -26,10 +26,10 @@ const useCountry = (id?: string) => {
     }, [id]);
 
     useEffect(() => {
-        void fetch();
+        void Promise.resolve().then(fetch);
     }, [fetch]);
 
-    return { country, loading, error };
+    return { country, loading, error, fetch };
 };
 
 export default useCountry;
